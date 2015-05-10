@@ -1,1 +1,38 @@
-ale ajaja!
+<html>
+<title>Amazing Twitter Live Stats Page!</title>
+<head>
+    <style>
+        .chart div {
+            font: 10px sans-serif;
+            background-color: steelblue;
+            text-align: right;
+            padding: 3px;
+            margin: 1px;
+            color: white;
+        }
+    </style>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script>
+        window.onload = function () {
+
+            var ws = new WebSocket('ws://localhost:8085/main');
+            ws.on('open', function () {
+                ws.send('something');
+            });
+            ws.on('message', function (message) {
+                console.log('received: %s', message);
+            });
+
+            console.log("asdsddasa");
+
+        };
+
+    </script>
+
+</head>
+<body>
+And here we are!
+<div class="chart" style=".chart">
+</div>
+</body>
+</html>

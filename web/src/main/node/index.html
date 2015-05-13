@@ -19,9 +19,9 @@
                     .domain(occurrences)
                     .rangeBands([0, (bar_height + 2 * gap) * keywords.length]);
 
-            d3.select("#step-5").select('svg').remove();
+            d3.select('#barchart').select('svg').remove();
 
-            var chart = d3.select("#step-5")
+            var chart = d3.select('#barchart')
                     .append('svg')
                     .attr('class', 'chart')
                     .attr('width', left_width + width + 40)
@@ -93,8 +93,8 @@
         }
 
         window.onload = function () {
-            var keywords = [],
-                occurrences = [];
+            var keywords = [];
+            var occurrences = [];
 
             var ws = new WebSocket('ws://localhost:8085/main');
 
@@ -117,7 +117,7 @@
 
 </head>
 <body>
-<div class="barchart" id="step-5">
+<div id="barchart">
 </div>
 </body>
 </html>

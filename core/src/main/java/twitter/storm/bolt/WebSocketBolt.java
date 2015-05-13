@@ -6,21 +6,33 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseBasicBolt;
 import backtype.storm.tuple.Tuple;
 import camel.RouteStarter;
+import com.google.gson.Gson;
 import org.apache.camel.ProducerTemplate;
 import twitter4j.Status;
 
+import java.util.List;
 import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by grzmiejski on 4/27/15.
  */
 public class WebSocketBolt extends BaseBasicBolt {
     private ProducerTemplate producerTemplate;
+    private final List<String> keywords;
+
+    public WebSocketBolt(List<String> keywords) {
+        this.keywords = keywords;
+    }
 
     @Override
     public void execute(Tuple input, BasicOutputCollector basicOutputCollector) {
         Status s = (Status) input.getValueByField("tweet");
-        producerTemplate.sendBody("direct:main", s.getText());
+        String statusTextLower = s.getText().toLowerCase();
+        List<String> matchingKeywords = keywords.stream().filter(statusTextLower::contains).collect(toList());
+        String json = new Gson().toJson(matchingKeywords);
+        producerTemplate.sendBody("direct:main", json);
     }
 
     @Override

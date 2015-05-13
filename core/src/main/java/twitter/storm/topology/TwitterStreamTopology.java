@@ -26,7 +26,7 @@ public class TwitterStreamTopology {
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("tweetSpout", new TweetSpout(keywords));
         builder.setBolt("tweet", new TweetBolt(), 1).shuffleGrouping("tweetSpout");
-        builder.setBolt("websocket", new WebSocketBolt(), 2).shuffleGrouping("tweetSpout");
+        builder.setBolt("websocket", new WebSocketBolt(keywords), 2).shuffleGrouping("tweetSpout");
         Config conf = new Config();
         conf.setDebug(false);
 

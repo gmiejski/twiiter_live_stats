@@ -10,3 +10,9 @@
     * maven package
     * storm jar TwitterLiveStats-1.0-SNAPSHOT-jar-with-dependencies.jar  twitter.storm.topology.TwitterStreamTopology python ruby java
     
+    
+3. Run web client:
+    * cd web/src/main/node/express_test
+    * node install
+    * node server.js
+    * go to localhost:8080 and open console to see tweets coming!

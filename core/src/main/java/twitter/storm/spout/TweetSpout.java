@@ -9,6 +9,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
 import twitter.Twitter4jReader;
+import twitter.rest.KeywordsRepository;
 import twitter4j.Status;
 
 import java.util.List;
@@ -32,8 +33,8 @@ public class TweetSpout extends BaseRichSpout {
 
     public void open(Map map, TopologyContext topologyContext, SpoutOutputCollector spoutOutputCollector) {
         this.spoutOutputCollector = spoutOutputCollector;
-        queue = new LinkedBlockingQueue<Status>(1000);
-        this.twitter4jReader = new Twitter4jReader(queue, keywords);
+        queue = new LinkedBlockingQueue<>(1000);
+        this.twitter4jReader = new Twitter4jReader(queue, keywords, new KeywordsRepository());
         twitter4jReader.startStreaming();
     }
 

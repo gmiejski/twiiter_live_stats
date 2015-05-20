@@ -23,8 +23,8 @@ public class KeywordsController {
 
     @RequestMapping(name = "keywords", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public ResponseEntity<List<Keyword>> getKeywords() {
-        return new ResponseEntity<>(keywordRepository.findAll(), HttpStatus.OK);
+    public List<Keyword> getKeywords() {
+        return keywordRepository.findAll();
     }
 
     @RequestMapping(name = "keywords", method = RequestMethod.POST)

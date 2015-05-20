@@ -2,9 +2,11 @@ package twitter.rest;
 
 import agh.toik.model.Keyword;
 import com.mongodb.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -19,6 +21,14 @@ public class KeywordsRepository {
     }
 
     public static void main(String[] args) {
+        RestTemplate restTemplate = new RestTemplate();
+        List<LinkedHashMap<String, String>> listResponseEntity = restTemplate.getForObject("http://localhost:8080/keywords", List.class);
+
+        List<Keyword> keywords2 = listResponseEntity.stream().map(x -> new Keyword(x.get("value"))).collect(toList());
+
+        for (Keyword keyword : keywords2) {
+            System.out.println(keyword.getValue());
+        }
 
         try {
             DBCollection keyword = dbCollection("keyword");
@@ -43,7 +53,7 @@ public class KeywordsRepository {
         return db.getCollection(collectionName);
     }
 
-    public List<Keyword> find() {
+    public List<Keyword> findByDatabase() {
         List<Keyword> keywords = new ArrayList<>();
         try {
             DBCollection keyword = dbCollection("keyword");
@@ -60,4 +70,12 @@ public class KeywordsRepository {
         }
         return keywords;
     }
+
+    public List<Keyword> findByWeb() {
+        RestTemplate restTemplate = new RestTemplate();
+        List<LinkedHashMap<String, String>> listResponseEntity = restTemplate.getForObject("http://localhost:8080/keywords", List.class);
+
+        return listResponseEntity.stream().map(x -> new Keyword(x.get("value"))).collect(toList());
+    }
+
 }

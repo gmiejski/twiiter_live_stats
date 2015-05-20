@@ -58,7 +58,7 @@ public class Twitter4jReader {
         if (keywords != null && !keywords.isEmpty()) {
             tweetFilterQuery.track((String[]) keywords.toArray());
         } else {
-            List<String> keywords = keywordsRepository.find()
+            List<String> keywords = keywordsRepository.findByWeb()
                     .stream()
                     .map(Keyword::getValue)
                     .collect(Collectors.toList());

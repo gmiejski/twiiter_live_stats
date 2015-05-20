@@ -21,15 +21,24 @@ public class KeywordsController {
     @Autowired
     private KeywordRepository keywordRepository;
 
-    @RequestMapping(name = "keywords", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "keywords", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public List<Keyword> getKeywords() {
         return keywordRepository.findAll();
     }
 
-    @RequestMapping(name = "keywords", method = RequestMethod.POST)
+    @RequestMapping(value = "keywords", method = RequestMethod.POST)
+    @ResponseBody
     public ResponseEntity<Keyword> enterNewKeyword(Keyword keyword) {
         Keyword saved = keywordRepository.save(keyword);
         return new ResponseEntity<>(saved, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "keywords/clear", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> clearKeywords() {
+        keywordRepository.deleteAll();
+        return new ResponseEntity<>("deleted", HttpStatus.OK);
+    }
+
 }

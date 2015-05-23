@@ -2,45 +2,33 @@ package twitter.rest;
 
 import agh.toik.model.Keyword;
 import com.mongodb.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.StreamSupport;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Created by grzegorz.miejski on 17/05/15.
  */
-public class KeywordsRepository {
+public class KeywordsRepository extends GenericRepository<Keyword> {
 
     public KeywordsRepository() {
     }
 
     public static void main(String[] args) {
-        RestTemplate restTemplate = new RestTemplate();
-        List<LinkedHashMap<String, String>> listResponseEntity = restTemplate.getForObject("http://localhost:8080/keywords", List.class);
+        new KeywordsRepository().getAll().forEach(System.out::println);
 
-        List<Keyword> keywords2 = listResponseEntity.stream().map(x -> new Keyword(x.get("value"))).collect(toList());
-
-        for (Keyword keyword : keywords2) {
-            System.out.println(keyword.getValue());
-        }
-
-        try {
-            DBCollection keyword = dbCollection("keyword");
-            DBCursor dbCursor = keyword.find();
-            List<Keyword> keywords = StreamSupport.stream(dbCursor.spliterator(), false)
-                    .map(KeywordsRepository::getKeyword)
-                    .collect(toList());
-
-            keywords.forEach(System.out::println);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            DBCollection keyword = dbCollection("keyword");
+//            DBCursor dbCursor = keyword.find();
+//            List<Keyword> keywords = StreamSupport.stream(dbCursor.spliterator(), false)
+//                    .map(KeywordsRepository::getKeyword)
+//                    .collect(toList());
+//
+//            keywords.forEach(System.out::println);
+//        } catch (UnknownHostException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private static Keyword getKeyword(DBObject dbObject) {
@@ -71,11 +59,7 @@ public class KeywordsRepository {
         return keywords;
     }
 
-    public List<Keyword> findByWeb() {
-        RestTemplate restTemplate = new RestTemplate();
-        List<LinkedHashMap<String, String>> listResponseEntity = restTemplate.getForObject("http://localhost:8080/keywords", List.class);
-
-        return listResponseEntity.stream().map(x -> new Keyword(x.get("value"))).collect(toList());
+    public List<Keyword> getAll() {
+        return this.findByWeb("http://localhost:8080/keywords", map -> new Keyword(map.get("value")));
     }
-
 }

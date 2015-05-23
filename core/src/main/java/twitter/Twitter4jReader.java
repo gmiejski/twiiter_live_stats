@@ -35,7 +35,7 @@ public class Twitter4jReader {
     }
 
     private List<String> getKeywordsFromRepository() {
-        return keywordsRepository.findByWeb()
+        return keywordsRepository.getAll()
                 .stream()
                 .map(Keyword::getValue)
                 .collect(Collectors.toList());
@@ -66,9 +66,9 @@ public class Twitter4jReader {
             try {
                 while (true) {
                     Thread.sleep(KEYWORDS_CACHE_REFRESH_TIME);
-                    System.out.println("******************************************************");
-                    System.out.println("checking if new keywords appeared");
-                    System.out.println("******************************************************");
+//                    System.out.println("******************************************************");
+//                    System.out.println("checking if new keywords appeared");
+//                    System.out.println("******************************************************");
                     synchronized (statuses) {
                         List<String> newPossibleKeywords = getKeywordsFromRepository();
                         if (shouldReplaceKeywords(newPossibleKeywords, cachedKeywords())) {

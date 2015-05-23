@@ -1,4 +1,4 @@
-package twitter.storm.bolt;
+package twitter.storm.bolt.websocket;
 
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
@@ -18,11 +18,11 @@ import static java.util.stream.Collectors.toList;
 /**
  * Created by grzmiejski on 4/27/15.
  */
-public class WebSocketBolt extends BaseBasicBolt {
-    private ProducerTemplate producerTemplate;
+public class KeywordsWebSocketBolt extends BaseBasicBolt {
     private final List<String> keywords;
+    private ProducerTemplate producerTemplate;
 
-    public WebSocketBolt(List<String> keywords) {
+    public KeywordsWebSocketBolt(List<String> keywords) {
         this.keywords = keywords;
     }
 

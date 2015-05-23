@@ -19,7 +19,7 @@ public class KeywordConnection {
     private int totalCount;
 
     public KeywordConnection(String firstKeyword, String secondKeyword) {
-        List<Object> collect = asList(firstKeyword, secondKeyword).stream().sorted().collect(toList());
+        List<Object> collect = asList(firstKeyword.toLowerCase(), secondKeyword.toLowerCase()).stream().sorted().collect(toList());
         this.firstKeyword = (String) collect.get(0);
         this.secondKeyword = (String) collect.get(1);
     }
@@ -54,5 +54,14 @@ public class KeywordConnection {
 
     public void setTotalCount(int totalCount) {
         this.totalCount = totalCount;
+    }
+
+
+    @Override
+    public String toString() {
+        return "KeywordConnection{" +
+                "firstKeyword='" + firstKeyword + '\'' +
+                ", secondKeyword='" + secondKeyword + '\'' +
+                '}';
     }
 }

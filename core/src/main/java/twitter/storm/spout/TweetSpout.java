@@ -47,6 +47,16 @@ public class TweetSpout extends BaseRichSpout {
         if (status == null) {
             Utils.sleep(50);
         } else {
+//            if (status.getText().toLowerCase().contains("sun") && status.getText().toLowerCase().contains("spring")) {
+//                System.out.println("contains sun && spring");
+//                System.out.println(status.getText().toLowerCase());
+//            } else if (status.getText().toLowerCase().contains("sun")) {
+//                System.out.println("contains sun ");
+//                System.out.println(status.getText().toLowerCase());
+//            } else {
+//                System.out.println("contains spring");
+//                System.out.println(status.getText().toLowerCase());
+//            }
             spoutOutputCollector.emit(new Values(status));
         }
     }

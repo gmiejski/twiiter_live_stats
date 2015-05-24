@@ -8,8 +8,7 @@
 2. Run:
     * change twitter4j.properties.template into filled twitter4j.properties file
     * maven package
-    * storm jar TwitterLiveStats-1.0-SNAPSHOT-jar-with-dependencies.jar  twitter.storm.topology.TwitterStreamTopology python ruby java
-    
+    * storm jar core/target/core-1.0-SNAPSHOT-jar-with-dependencies.jar twitter.storm.topology.TwitterStreamTopology
     
 3. Run web client:
     * cd web/src/main/node/express_test

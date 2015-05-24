@@ -42,7 +42,6 @@ public class KeywordConnectionsBolt extends BaseRichBolt {
                 .collect(Collectors.toList());
 
         foundKeywordsConnections.forEach(keywordConnection -> outputCollector.emit(new Values(keywordConnection)));
-        System.out.println("Found keywords connections = " + foundKeywordsConnections.size());
     }
 
     @Override

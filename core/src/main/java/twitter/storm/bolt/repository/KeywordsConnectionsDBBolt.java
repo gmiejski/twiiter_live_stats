@@ -28,7 +28,6 @@ public class KeywordsConnectionsDBBolt extends BaseRichBolt {
         KeywordConnection keywordConnection = (KeywordConnection) input.getValueByField(KeywordConnectionsBolt.KEYWORD_CONNECTION_OUTPUT_STRING);
 
         keywordsConnectionsRepository.incrementCount(keywordConnection);
-        System.out.println(keywordConnection);
     }
 
     @Override

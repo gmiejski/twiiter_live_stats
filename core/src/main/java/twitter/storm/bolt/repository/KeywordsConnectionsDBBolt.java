@@ -6,6 +6,7 @@ import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Tuple;
+import twitter.rest.KeywordsConnectionsRepository;
 import twitter.storm.bolt.connections.KeywordConnectionsBolt;
 
 import java.util.Map;
@@ -15,15 +16,18 @@ import java.util.Map;
  */
 public class KeywordsConnectionsDBBolt extends BaseRichBolt {
 
+    KeywordsConnectionsRepository keywordsConnectionsRepository;
 
     @Override
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
-
+        keywordsConnectionsRepository = new KeywordsConnectionsRepository();
     }
 
     @Override
     public void execute(Tuple input) {
         KeywordConnection keywordConnection = (KeywordConnection) input.getValueByField(KeywordConnectionsBolt.KEYWORD_CONNECTION_OUTPUT_STRING);
+
+        keywordsConnectionsRepository.incrementCount(keywordConnection);
         System.out.println(keywordConnection);
     }
 

@@ -4,8 +4,9 @@ import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import camel.RouteStarter;
-import twitter.storm.bolt.TweetBolt;
-import twitter.storm.bolt.WebSocketBolt;
+import twitter.storm.bolt.connections.KeywordConnectionsBolt;
+import twitter.storm.bolt.repository.KeywordsConnectionsDBBolt;
+import twitter.storm.bolt.websocket.KeywordsConnectionsWebSocketBolt;
 import twitter.storm.spout.TweetSpout;
 
 import java.util.Arrays;
@@ -16,6 +17,8 @@ import java.util.List;
  */
 public class TwitterStreamTopology {
 
+    public static final String TWEET_SPOUT = "tweetSpout";
+
     public static void main(String[] args) {
         List<String> keywords = Arrays.asList(args);
 
@@ -24,9 +27,17 @@ public class TwitterStreamTopology {
         keywords.stream().forEach(System.out::println);
 
         TopologyBuilder builder = new TopologyBuilder();
-        builder.setSpout("tweetSpout", new TweetSpout(keywords));
-        builder.setBolt("tweet", new TweetBolt(), 1).shuffleGrouping("tweetSpout");
-        builder.setBolt("websocket", new WebSocketBolt(keywords), 2).shuffleGrouping("tweetSpout");
+        builder.setSpout(TWEET_SPOUT, new TweetSpout(keywords));
+
+        // keywords
+//        builder.setBolt("tweet", new TweetBolt(), 1).shuffleGrouping(TWEET_SPOUT);
+//        builder.setBolt("websocket", new KeywordsWebSocketBolt(keywords), 2).shuffleGrouping(TWEET_SPOUT);
+
+        // keywords connections
+        builder.setBolt("keywordsConnection", new KeywordConnectionsBolt(), 1).shuffleGrouping(TWEET_SPOUT);
+        builder.setBolt("keywordsConnectionUpdater", new KeywordsConnectionsDBBolt(), 1).shuffleGrouping("keywordsConnection");
+        builder.setBolt("keywordsConnectionWebSocket", new KeywordsConnectionsWebSocketBolt(), 1).shuffleGrouping("keywordsConnection");
+
         Config conf = new Config();
         conf.setDebug(false);
 

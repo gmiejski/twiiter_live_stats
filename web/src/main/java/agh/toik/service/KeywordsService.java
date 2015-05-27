@@ -21,6 +21,14 @@ public class KeywordsService {
 
     public List<Keyword> findAll(LocalDateTime startDate, LocalDateTime endDate) {
         List<Keyword> keywords = keywordRepository.findAll();
+        if (startDate == null && endDate == null) {
+            return keywords;
+        }
+
+        return keywordsByDates(startDate, endDate, keywords);
+    }
+
+    private List<Keyword> keywordsByDates(LocalDateTime startDate, LocalDateTime endDate, List<Keyword> keywords) {
         keywords.stream().forEach(keyword -> removeDatesOutOfQuery(startDate, endDate, keyword));
 
         return keywords.stream()

@@ -25,6 +25,13 @@ public class KeywordsWebSocketBolt extends BaseBasicBolt {
     private AutoUpdateKeywordsCache autoUpdateKeywordsCache;
 
     @Override
+    public void prepare(Map stormConf, TopologyContext context) {
+        super.prepare(stormConf, context);
+        this.producerTemplate = RouteStarter.getProducerTemplate();
+        this.autoUpdateKeywordsCache = new AutoUpdateKeywordsCache();
+    }
+
+    @Override
     public void execute(Tuple input, BasicOutputCollector basicOutputCollector) {
         Status s = (Status) input.getValueByField("tweet");
         String statusTextLower = s.getText().toLowerCase();
@@ -39,12 +46,5 @@ public class KeywordsWebSocketBolt extends BaseBasicBolt {
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-    }
-
-    @Override
-    public void prepare(Map stormConf, TopologyContext context) {
-        super.prepare(stormConf, context);
-        this.producerTemplate = RouteStarter.getProducerTemplate();
-        this.autoUpdateKeywordsCache = new AutoUpdateKeywordsCache();
     }
 }

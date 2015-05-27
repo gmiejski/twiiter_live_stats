@@ -5,6 +5,7 @@ import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import camel.RouteStarter;
 import twitter.storm.bolt.TweetBolt;
+import twitter.storm.bolt.TweetFilterBolt;
 import twitter.storm.bolt.websocket.KeywordsWebSocketBolt;
 import twitter.storm.spout.TweetSpout;
 
@@ -14,6 +15,7 @@ import twitter.storm.spout.TweetSpout;
 public class TwitterStreamTopology {
 
     public static final String TWEET_SPOUT = "tweetSpout";
+    public static final String TWEET_FILTER = "tweetFilter";
 
     public static void main(String[] args) {
         RouteStarter.buildRoute();
@@ -22,8 +24,9 @@ public class TwitterStreamTopology {
         builder.setSpout(TWEET_SPOUT, new TweetSpout());
 
         // keywords
-        builder.setBolt("tweet", new TweetBolt(), 1).shuffleGrouping(TWEET_SPOUT);
-        builder.setBolt("websocket", new KeywordsWebSocketBolt(), 2).shuffleGrouping(TWEET_SPOUT);
+        builder.setBolt(TWEET_FILTER, new TweetFilterBolt(), 1).shuffleGrouping(TWEET_SPOUT);
+        builder.setBolt("tweet", new TweetBolt(), 1).shuffleGrouping(TWEET_FILTER);
+        builder.setBolt("websocket", new KeywordsWebSocketBolt(), 2).shuffleGrouping(TWEET_FILTER);
 
         // keywords connections
 //        builder.setBolt("keywordsConnection", new KeywordConnectionsBolt(), 1).shuffleGrouping(TWEET_SPOUT);
@@ -34,11 +37,5 @@ public class TwitterStreamTopology {
 
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("test", conf, builder.createTopology());
-
-
-//        Utils.sleep(20000);
-//        cluster.shutdown();
     }
-
-
 }

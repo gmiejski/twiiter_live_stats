@@ -1,12 +1,13 @@
 package twitter;
 
-import agh.toik.model.Keyword;
-import twitter.rest.KeywordsRepository;
+import twitter.storm.bolt.cache.api.KeywordCache;
+import twitter.storm.bolt.cache.impl.AutoUpdateKeywordsCache;
 import twitter4j.*;
 
 import java.util.List;
 import java.util.Queue;
-import java.util.stream.Collectors;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by grzmiejski on 4/26/15.
@@ -14,31 +15,22 @@ import java.util.stream.Collectors;
 public class Twitter4jReader {
     public static final int KEYWORDS_CACHE_REFRESH_TIME = 5000;
     private final Queue<Status> statuses;
-    private final KeywordsRepository keywordsRepository;
     private List<String> keywords;
     private TwitterStream twitterStream;
+    private KeywordCache keywordCache;
 
-    public Twitter4jReader(Queue<Status> statuses, List<String> keywords, KeywordsRepository keywordsRepository) {
+    public Twitter4jReader(Queue<Status> statuses) {
         this.statuses = statuses;
-        this.keywords = keywords;
-        this.keywordsRepository = keywordsRepository;
+        this.keywordCache = new AutoUpdateKeywordsCache();
     }
 
     public void startStreaming() {
-        List<String> keywords = getKeywordsFromRepository();
-
+        List<String> keywords = keywordCache.retrieveKeywords();
         synchronized (statuses) {
             startReadingTweets(keywords);
             cacheKeywords(keywords);
             setRepositoryWatcher();
         }
-    }
-
-    private List<String> getKeywordsFromRepository() {
-        return keywordsRepository.getAll()
-                .stream()
-                .map(Keyword::getValue)
-                .collect(Collectors.toList());
     }
 
     private void startReadingTweets(List<String> keywords) {
@@ -62,26 +54,20 @@ public class Twitter4jReader {
     }
 
     private void setRepositoryWatcher() {
-        new Thread(() -> {
-            try {
-                while (true) {
-                    Thread.sleep(KEYWORDS_CACHE_REFRESH_TIME);
-//                    System.out.println("******************************************************");
-//                    System.out.println("checking if new keywords appeared");
-//                    System.out.println("******************************************************");
-                    synchronized (statuses) {
-                        List<String> newPossibleKeywords = getKeywordsFromRepository();
-                        if (shouldReplaceKeywords(newPossibleKeywords, cachedKeywords())) {
-                            System.out.println("New Keywords. Updating keywords list: ");
-                            startReadingTweets(newPossibleKeywords);
-                            cacheKeywords(newPossibleKeywords);
+        new Timer()
+                .schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        synchronized (statuses) {
+                            List<String> newPossibleKeywords = keywordCache.retrieveKeywords();
+                            if (shouldReplaceKeywords(newPossibleKeywords, cachedKeywords())) {
+                                System.out.println("New Keywords. Updating keywords list: ");
+                                startReadingTweets(newPossibleKeywords);
+                                cacheKeywords(newPossibleKeywords);
+                            }
                         }
                     }
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();
+                }, KEYWORDS_CACHE_REFRESH_TIME, KEYWORDS_CACHE_REFRESH_TIME);
     }
 
     private boolean shouldReplaceKeywords(List<String> newPossibleKeywords, List<String> cachedKeywords) {

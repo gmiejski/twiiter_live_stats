@@ -19,38 +19,29 @@ public class RouteStarter {
             camelContext = new DefaultCamelContext();
             camelContext.addRoutes(new MyRouteBuilder());
 
-            // ACTIVEMQ (JMS)
-            //context.addComponent("activemq",
-            //	ActiveMQComponent.activeMQComponent("vm://localhost?broker.persistent=false"));
-
-            ProducerTemplate template = camelContext.createProducerTemplate();
             camelContext.start();
             System.out.println("Context started \n\n");
-
             return camelContext;
         } catch (Exception e) {
             System.out.println("EXCEPTION IN MAIN APP " + e.getMessage());
         }
-
         return null;
     }
 
-    public static ProducerTemplate getP() {
+    public static ProducerTemplate getProducerTemplate() {
+        if (camelContext == null) {
+            buildRoute();
+        }
         return camelContext.createProducerTemplate();
     }
 
     public static void main(String[] args) {
         try {
 
-            // CONTEXT
             JndiContext jndiContext = new JndiContext();
             CamelContext context = new DefaultCamelContext(jndiContext);
 
             context.addRoutes(new MyRouteBuilder());
-
-            // ACTIVEMQ (JMS)
-            //context.addComponent("activemq",
-            //	ActiveMQComponent.activeMQComponent("vm://localhost?broker.persistent=false"));
 
             ProducerTemplate template = context.createProducerTemplate();
             context.start();

@@ -8,7 +8,7 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
-import twitter.storm.bolt.connections.cache.AutoUpdateKeywordsConnectionsCache;
+import twitter.storm.bolt.cache.impl.AutoUpdateKeywordsConnectionsCache;
 import twitter4j.Status;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class KeywordConnectionsBolt extends BaseRichBolt {
     public void execute(Tuple input) {
         Status tweet = (Status) input.getValueByField("tweet");
         String tweetText = tweet.getText().toLowerCase();
-        List<KeywordConnection> foundKeywordsConnections = keywordsConnectionsCache.getKeywordsConnections()
+        List<KeywordConnection> foundKeywordsConnections = keywordsConnectionsCache.retrieve()
                 .stream()
                 .filter(keywordConnection -> tweetText.contains(keywordConnection.getFirstKeyword())
                         && tweetText.contains(keywordConnection.getSecondKeyword()))

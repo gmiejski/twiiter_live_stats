@@ -5,12 +5,12 @@ import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import camel.RouteStarter;
 import twitter.storm.bolt.connections.KeywordConnectionsBolt;
+import twitter.storm.bolt.keywords.TweetBolt;
+import twitter.storm.bolt.keywords.TweetFilterBolt;
+import twitter.storm.bolt.keywords.websocket.KeywordsWebSocketBolt;
 import twitter.storm.bolt.repository.KeywordsConnectionsDBBolt;
-import twitter.storm.bolt.websocket.KeywordsConnectionsWebSocketBolt;
+import twitter.storm.bolt.repository.KeywordsDBBolt;
 import twitter.storm.spout.TweetSpout;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by grzmiejski on 4/26/15.
@@ -18,36 +18,29 @@ import java.util.List;
 public class TwitterStreamTopology {
 
     public static final String TWEET_SPOUT = "tweetSpout";
+    public static final String TWEET_FILTER = "tweetFilter";
 
     public static void main(String[] args) {
-        List<String> keywords = Arrays.asList(args);
-
         RouteStarter.buildRoute();
 
-        keywords.stream().forEach(System.out::println);
-
         TopologyBuilder builder = new TopologyBuilder();
-        builder.setSpout(TWEET_SPOUT, new TweetSpout(keywords));
+        builder.setSpout(TWEET_SPOUT, new TweetSpout());
 
         // keywords
-//        builder.setBolt("tweet", new TweetBolt(), 1).shuffleGrouping(TWEET_SPOUT);
-//        builder.setBolt("websocket", new KeywordsWebSocketBolt(keywords), 2).shuffleGrouping(TWEET_SPOUT);
+        builder.setBolt(TWEET_FILTER, new TweetFilterBolt(), 1).shuffleGrouping(TWEET_SPOUT);
+
+        builder.setBolt("tweet", new TweetBolt(), 1).shuffleGrouping(TWEET_FILTER);
+        builder.setBolt("websocket", new KeywordsWebSocketBolt(), 2).shuffleGrouping(TWEET_FILTER);
+        builder.setBolt("tweetKeywordsOccurrencesUpdater", new KeywordsDBBolt(), 1).shuffleGrouping(TWEET_FILTER);
 
         // keywords connections
         builder.setBolt("keywordsConnection", new KeywordConnectionsBolt(), 1).shuffleGrouping(TWEET_SPOUT);
         builder.setBolt("keywordsConnectionUpdater", new KeywordsConnectionsDBBolt(), 1).shuffleGrouping("keywordsConnection");
-        builder.setBolt("keywordsConnectionWebSocket", new KeywordsConnectionsWebSocketBolt(), 1).shuffleGrouping("keywordsConnection");
 
         Config conf = new Config();
         conf.setDebug(false);
 
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("test", conf, builder.createTopology());
-
-
-//        Utils.sleep(20000);
-//        cluster.shutdown();
     }
-
-
 }

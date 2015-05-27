@@ -2,14 +2,14 @@ package agh.toik.controller;
 
 import agh.toik.model.Keyword;
 import agh.toik.repository.KeywordRepository;
+import agh.toik.service.KeywordsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -18,13 +18,19 @@ import java.util.List;
 @RestController
 public class KeywordsController {
 
+    private static final String REQUEST_DATE_FORMAT = "yyyy-MM-dd-HH:mm";
+
     @Autowired
     private KeywordRepository keywordRepository;
 
+    @Autowired
+    private KeywordsService keywordsService;
+
     @RequestMapping(value = "keywords", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public List<Keyword> getKeywords() {
-        return keywordRepository.findAll();
+    public List<Keyword> getKeywords(
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = REQUEST_DATE_FORMAT) LocalDateTime startDate, @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = REQUEST_DATE_FORMAT) LocalDateTime endDate) {
+        return keywordsService.findAll(startDate, endDate);
     }
 
     @RequestMapping(value = "keywords", method = RequestMethod.POST)

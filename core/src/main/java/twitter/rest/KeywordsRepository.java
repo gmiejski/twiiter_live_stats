@@ -17,18 +17,6 @@ public class KeywordsRepository extends GenericRepository<Keyword> {
 
     public static void main(String[] args) {
         new KeywordsRepository().getAll().forEach(System.out::println);
-
-//        try {
-//            DBCollection keyword = dbCollection("keyword");
-//            DBCursor dbCursor = keyword.find();
-//            List<Keyword> keywords = StreamSupport.stream(dbCursor.spliterator(), false)
-//                    .map(KeywordsRepository::getKeyword)
-//                    .collect(toList());
-//
-//            keywords.forEach(System.out::println);
-//        } catch (UnknownHostException e) {
-//            e.printStackTrace();
-//        }
     }
 
     private static Keyword getKeyword(DBObject dbObject) {

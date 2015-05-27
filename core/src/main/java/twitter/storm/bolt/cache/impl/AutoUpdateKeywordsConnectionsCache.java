@@ -1,16 +1,21 @@
-package twitter.storm.bolt.connections.cache;
+package twitter.storm.bolt.cache.impl;
 
 import agh.toik.model.KeywordConnection;
 import org.springframework.web.client.RestClientException;
 import twitter.rest.KeywordsConnectionsRepository;
+import twitter.storm.bolt.cache.api.KeywordsConnectionsCache;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by grzegorz.miejski on 23/05/15.
  */
 public class AutoUpdateKeywordsConnectionsCache implements KeywordsConnectionsCache {
 
+    private static final int CACHE_REFRESH_TIME = 5000;
     private final KeywordsConnectionsRepository keywordsConnectionsRepository;
     private List<KeywordConnection> cachedConnections;
 
@@ -29,15 +34,15 @@ public class AutoUpdateKeywordsConnectionsCache implements KeywordsConnectionsCa
             @Override
             public void run() {
                 synchronized (keywordsConnectionsRepository) {
-                    System.out.println("******************************************************");
-                    System.out.println("Updating keywords connections");
-                    System.out.println("******************************************************");
+//                    System.out.println("******************************************************");
+//                    System.out.println("Updating keywords connections");
+//                    System.out.println("******************************************************");
                     cachedConnections = keywordsConnectionsRepository.getAll();
-                    System.out.println(Arrays.toString(cachedConnections.toArray()));
-                    System.out.println("******************************************************");
+//                    System.out.println(Arrays.toString(cachedConnections.toArray()));
+//                    System.out.println("******************************************************");
                 }
             }
-        }, 5000, 5000);
+        }, CACHE_REFRESH_TIME, CACHE_REFRESH_TIME);
     }
 
     private void updateCachedConnections() {
@@ -54,7 +59,7 @@ public class AutoUpdateKeywordsConnectionsCache implements KeywordsConnectionsCa
     }
 
     @Override
-    public List<KeywordConnection> getKeywordsConnections() {
+    public List<KeywordConnection> retrieve() {
         synchronized (keywordsConnectionsRepository) {
             return new ArrayList<>(this.cachedConnections);
         }

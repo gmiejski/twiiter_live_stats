@@ -1,4 +1,4 @@
-package twitter.storm.bolt;
+package twitter.storm.bolt.keywords;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -21,6 +21,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class TweetFilterBolt extends BaseRichBolt {
 
+    public static final String KEYWORDS_FOUND = "keywords";
     private OutputCollector outputCollector;
     private KeywordCache keywordCache;
 
@@ -44,6 +45,6 @@ public class TweetFilterBolt extends BaseRichBolt {
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {
-        outputFieldsDeclarer.declare(new Fields("tweet", "keywords"));
+        outputFieldsDeclarer.declare(new Fields("tweet", KEYWORDS_FOUND));
     }
 }

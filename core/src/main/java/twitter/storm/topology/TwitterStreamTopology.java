@@ -4,9 +4,12 @@ import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.topology.TopologyBuilder;
 import camel.RouteStarter;
-import twitter.storm.bolt.TweetBolt;
-import twitter.storm.bolt.TweetFilterBolt;
-import twitter.storm.bolt.websocket.KeywordsWebSocketBolt;
+import twitter.storm.bolt.connections.KeywordConnectionsBolt;
+import twitter.storm.bolt.keywords.TweetBolt;
+import twitter.storm.bolt.keywords.TweetFilterBolt;
+import twitter.storm.bolt.keywords.websocket.KeywordsWebSocketBolt;
+import twitter.storm.bolt.repository.KeywordsConnectionsDBBolt;
+import twitter.storm.bolt.repository.KeywordsDBBolt;
 import twitter.storm.spout.TweetSpout;
 
 /**
@@ -25,13 +28,15 @@ public class TwitterStreamTopology {
 
         // keywords
         builder.setBolt(TWEET_FILTER, new TweetFilterBolt(), 1).shuffleGrouping(TWEET_SPOUT);
+
         builder.setBolt("tweet", new TweetBolt(), 1).shuffleGrouping(TWEET_FILTER);
         builder.setBolt("websocket", new KeywordsWebSocketBolt(), 2).shuffleGrouping(TWEET_FILTER);
+        builder.setBolt("tweetKeywordsOccurrencesUpdater", new KeywordsDBBolt(), 1).shuffleGrouping(TWEET_FILTER);
 
         // keywords connections
-//        builder.setBolt("keywordsConnection", new KeywordConnectionsBolt(), 1).shuffleGrouping(TWEET_SPOUT);
-//        builder.setBolt("keywordsConnectionUpdater", new KeywordsConnectionsDBBolt(), 1).shuffleGrouping("keywordsConnection");
-//
+        builder.setBolt("keywordsConnection", new KeywordConnectionsBolt(), 1).shuffleGrouping(TWEET_SPOUT);
+        builder.setBolt("keywordsConnectionUpdater", new KeywordsConnectionsDBBolt(), 1).shuffleGrouping("keywordsConnection");
+
         Config conf = new Config();
         conf.setDebug(false);
 

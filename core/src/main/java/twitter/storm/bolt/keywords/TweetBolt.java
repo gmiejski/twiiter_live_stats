@@ -1,4 +1,4 @@
-package twitter.storm.bolt;
+package twitter.storm.bolt.keywords;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;

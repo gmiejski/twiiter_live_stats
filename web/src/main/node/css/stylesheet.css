@@ -2,7 +2,14 @@ body {
     font-family: 'Ubuntu',Tahoma,sans-serif;
     line-height: 18px;
     color: #333333;
+    padding-top: 50px;
 }
+
+.starter-template {
+    padding: 40px 15px;
+    text-align: center;
+}
+
 
 .chart {
     background: #b0e0f8;

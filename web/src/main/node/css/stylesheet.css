@@ -5,11 +5,14 @@ body {
     padding-top: 50px;
 }
 
-.starter-template {
+.template-content {
     padding: 40px 15px;
     text-align: center;
 }
 
+#date-range {
+    width: 400px;
+}
 
 .chart {
     background: #b0e0f8;

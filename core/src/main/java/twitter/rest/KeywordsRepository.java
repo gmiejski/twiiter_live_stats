@@ -12,7 +12,6 @@ import java.util.List;
  */
 public class KeywordsRepository extends GenericRepository<Keyword> {
 
-    public static final BasicDBObject UPDATE_OCCURRENCES_QUERY = new BasicDBObject("$push", new BasicDBObject("occurrences", new Date()));
     private DBCollection keywordCollection;
 
     public KeywordsRepository() {
@@ -25,7 +24,7 @@ public class KeywordsRepository extends GenericRepository<Keyword> {
     }
 
     private static DBCollection keywordsCollection() throws UnknownHostException {
-        MongoClient mongoClient = new MongoClient("polpc00860", 27017);
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
         DB db = mongoClient.getDB("keywords");
         return db.getCollection("keyword");
     }
@@ -37,7 +36,8 @@ public class KeywordsRepository extends GenericRepository<Keyword> {
     public void addKeywordOccurrence(List<String> keywords) {
         keywords.forEach(keyword -> {
             DBObject searchQuery = new BasicDBObject("value", keyword);
-            keywordCollection.update(searchQuery, UPDATE_OCCURRENCES_QUERY);
+            BasicDBObject updateOccurrencesQuery = new BasicDBObject("$push", new BasicDBObject("occurrences", new Date()));
+            keywordCollection.update(searchQuery, updateOccurrencesQuery);
         });
     }
 }

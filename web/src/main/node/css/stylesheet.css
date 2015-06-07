@@ -14,38 +14,29 @@ body {
     width: 400px;
 }
 
-.chart {
-    background: #b0e0f8;
-    margin: 5px;
-}
-
-.chart rect {
-    stroke: white;
+.bar {
     fill: steelblue;
 }
 
-.chart text {
-    fill: white;
+.bar:hover {
+    fill: brown;
 }
 
-.chart text.name {
-    fill: #000;
+.axis {
+    font: 10px sans-serif;
 }
 
-.chart line {
-    stroke: #c1c1c1;
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
 }
 
-.chart .rule {
-    fill: #000;
+.x.axis path {
+    display: none;
 }
 
-/* removed the while stroke as we don't need it anymore */
-#barchart .chart rect {
-    stroke: none;
-}
-
-/* a bit of hovering effect for each bar */
-#barchart .chart rect:hover {
-    fill: #64707D;
+.count {
+    text-anchor: middle;
 }

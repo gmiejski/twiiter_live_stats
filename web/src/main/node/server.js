@@ -1,7 +1,6 @@
 var connect = require('connect');
 var serveStatic = require('serve-static');
-connect().use(serveStatic('./')).listen(8080);
-console.log('asd');
+connect().use(serveStatic('./')).listen(8081);
 
 //var WebSocketServer = require('ws').Server
 //var wss = new WebSocketServer({port: 8085, path: '/main'});

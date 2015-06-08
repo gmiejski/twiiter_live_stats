@@ -1,0 +1,42 @@
+body {
+    font-family: 'Ubuntu',Tahoma,sans-serif;
+    line-height: 18px;
+    color: #333333;
+    padding-top: 50px;
+}
+
+.template-content {
+    padding: 40px 15px;
+    text-align: center;
+}
+
+#date-range {
+    width: 400px;
+}
+
+.bar {
+    fill: steelblue;
+}
+
+.bar:hover {
+    fill: brown;
+}
+
+.axis {
+    font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.count {
+    text-anchor: middle;
+}

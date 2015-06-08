@@ -19,7 +19,7 @@ public class KeywordsConnectionsRepository extends GenericRepository<KeywordConn
 
     public KeywordsConnectionsRepository() {
         try {
-            DB db = new MongoClient("polpc00860", 27017).getDB("keywords");
+            DB db = new MongoClient("localhost", 27017).getDB("keywords");
             keywordCollection = db.getCollection("keywordConnection");
         } catch (UnknownHostException e) {
             e.printStackTrace();

@@ -14,19 +14,19 @@ $(function () {
     };
     startPicker.datetimepicker(options);
     endPicker.datetimepicker(options);
-    startPicker.on("dp.change", function (e) {
+    startPicker.on('dp.change', function (e) {
         getData(endPicker).minDate(getDateLimit(e.date));
     });
-    endPicker.on("dp.change", function (e) {
+    endPicker.on('dp.change', function (e) {
         getData(startPicker).maxDate(getDateLimit(e.date));
     });
 
-    $("#reload-button").click(function () {
+    $('#reload-button').click(function () {
         var startDate = formatDate(startPicker);
         var endDate = formatDate(endPicker);
 
         $.get(
-            "http://localhost:8080/keywords",
+            'http://localhost:8080/keywords',
             {
                 startDate: startDate,
                 endDate: endDate
@@ -45,7 +45,7 @@ $(function () {
         }
     });
 
-    $("#clear-button").click(function () {
+    $('#clear-button').click(function () {
         keywords = [];
         getData(startPicker).date(null);
         getData(endPicker).date(null);
@@ -57,7 +57,7 @@ $(function () {
     turnOnLiveUpdate();
 
     function getData(picker) {
-        return picker.data("DateTimePicker");
+        return picker.data('DateTimePicker');
     }
 
     function getDateLimit(date) {
@@ -132,67 +132,67 @@ $(function () {
 
         var xAxis = d3.svg.axis()
             .scale(x)
-            .orient("bottom");
+            .orient('bottom');
 
         var yAxis = d3.svg.axis()
             .scale(y)
-            .orient("left")
+            .orient('left')
             .ticks(10)
-            .tickFormat(d3.format("d"));
+            .tickFormat(d3.format('d'));
 
         d3.select('#barchart').select('svg').remove();
 
-        var svg = d3.select("#barchart")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var svg = d3.select('#barchart')
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .append('g')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
         x.domain(keywords.map(getKeyword));
         y.domain([0, d3.max(keywords, getFrequency)]);
 
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
+        svg.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate(0,' + height + ')')
             .call(xAxis);
 
-        svg.append("g")
-            .attr("class", "y axis")
+        svg.append('g')
+            .attr('class', 'y axis')
             .call(yAxis)
-            .append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 6)
-            .attr("dy", ".71em")
-            .style("text-anchor", "end")
-            .text("Frequency");
+            .append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', 6)
+            .attr('dy', '.71em')
+            .style('text-anchor', 'end')
+            .text('Frequency');
 
-        var bar = svg.selectAll(".bar")
+        var bar = svg.selectAll('.bar')
             .data(keywords)
             .enter();
 
-        bar.append("rect")
-            .attr("class", "bar")
-            .attr("x", function (kw) {
+        bar.append('rect')
+            .attr('class', 'bar')
+            .attr('x', function (kw) {
                 return x(getKeyword(kw));
             })
-            .attr("width", x.rangeBand())
-            .attr("y", function (kw) {
+            .attr('width', x.rangeBand())
+            .attr('y', function (kw) {
                 return y(getFrequency(kw));
             })
-            .attr("height", function (kw) {
+            .attr('height', function (kw) {
                 return height - y(getFrequency(kw));
             });
 
-        bar.append("text")
-            .attr("class", "count")
-            .attr("x", function (kw) {
+        bar.append('text')
+            .attr('class', 'count')
+            .attr('x', function (kw) {
                 return x(getKeyword(kw)) + x.rangeBand() / 2;
             })
-            .attr("y", function (kw) {
+            .attr('y', function (kw) {
                 return y(getFrequency(kw)) - 10;
             })
-            .attr("dy", ".35em")
+            .attr('dy', '.35em')
             .text(getFrequency);
     }
 });

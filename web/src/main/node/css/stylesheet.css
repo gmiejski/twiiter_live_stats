@@ -1,5 +1,5 @@
 body {
-    font-family: 'Ubuntu',Tahoma,sans-serif;
+    font-family: 'Ubuntu', Tahoma, sans-serif;
     font-size: 14px;
     line-height: 18px;
     color: #333333;
@@ -56,13 +56,13 @@ a.anchor {
 .link {
     fill: none;
     stroke: #666;
-    stroke-width: 1.5px;
+    stroke-width: 2px;
 }
 
 .node circle {
     fill: #ccc;
     stroke: #fff;
-    stroke-width: 1.5px;
+    stroke-width: 2px;
 }
 
 .node-text {
@@ -79,7 +79,7 @@ a.anchor {
     text-align: left;
 }
 
-.world-map {
+#world-map {
     position: relative;
     width: 960px;
     height: 700px;
@@ -87,4 +87,8 @@ a.anchor {
 
 .screen-height {
     height: 1100px;
+}
+
+.strong {
+    font-weight: bold;
 }

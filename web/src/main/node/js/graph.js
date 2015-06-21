@@ -12,10 +12,7 @@ $(function () {
     refreshGraph();
 
     function refreshGraph() {
-        $.get(
-            'http://localhost:8080/keywords/connections',
-            {},
-            function (data) {
+        $.get('http://localhost:8080/keywords/connections', function (data) {
                 links = data.map(function (connection) {
                     return {
                         source: connection.firstKeyword,
@@ -52,7 +49,7 @@ $(function () {
             .nodes(d3.values(nodes))
             .links(links)
             .size([width, height])
-            .linkDistance(function (link, index) {
+            .linkDistance(function (link) {
                 return height / Math.sqrt(link.value / minValue);
             })
             .charge(-300)

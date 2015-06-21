@@ -1,8 +1,16 @@
 body {
     font-family: 'Ubuntu',Tahoma,sans-serif;
+    font-size: 14px;
     line-height: 18px;
     color: #333333;
     padding-top: 50px;
+}
+
+a.anchor {
+    display: block;
+    position: relative;
+    top: -50px;
+    visibility: hidden;
 }
 
 .template-content {
@@ -12,6 +20,10 @@ body {
 
 #date-range {
     width: 400px;
+}
+
+#barchart {
+    height: 500px;
 }
 
 .bar {
@@ -39,4 +51,26 @@ body {
 
 .count {
     text-anchor: middle;
+}
+
+.link {
+    fill: none;
+    stroke: #666;
+    stroke-width: 1.5px;
+}
+
+.node circle {
+    fill: #ccc;
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.node-text {
+    font: 10px sans-serif;
+    pointer-events: none;
+}
+
+.edge-text {
+    font: 14px sans-serif;
+    pointer-events: none;
 }

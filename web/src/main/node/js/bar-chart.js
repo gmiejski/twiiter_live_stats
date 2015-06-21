@@ -25,12 +25,6 @@ $(function () {
         var startDate = formatDate(startPicker);
         var endDate = formatDate(endPicker);
 
-        if (endDate == null) {
-            turnOnLiveUpdate();
-        } else {
-            turnOffLiveUpdate();
-        }
-
         $.get(
             "http://localhost:8080/keywords",
             {
@@ -43,6 +37,12 @@ $(function () {
                 redrawBarChart();
             }
         );
+
+        if (endDate == null) {
+            turnOnLiveUpdate();
+        } else {
+            turnOffLiveUpdate();
+        }
     });
 
     $("#clear-button").click(function () {

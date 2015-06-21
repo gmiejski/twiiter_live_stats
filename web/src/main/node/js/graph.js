@@ -7,36 +7,42 @@ $(function () {
     var nodes = {};
     var minValue = Infinity;
 
-    $.get(
-        'http://localhost:8080/keywords/connections',
-        {},
-        function (data) {
-            links = data.map(function (connection) {
-                return {
-                    source: connection.firstKeyword,
-                    target: connection.secondKeyword,
-                    value: connection.totalCount
-                }
-            });
+    $('#graph-refresh-button').click(refreshGraph);
 
-            links.forEach(function (link) {
-                link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
-                link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
-            });
+    refreshGraph();
 
-            links = links.filter(function (link) {
-                return link.value > 0;
-            });
+    function refreshGraph() {
+        $.get(
+            'http://localhost:8080/keywords/connections',
+            {},
+            function (data) {
+                links = data.map(function (connection) {
+                    return {
+                        source: connection.firstKeyword,
+                        target: connection.secondKeyword,
+                        value: connection.totalCount
+                    }
+                });
 
-            links.forEach(function (link) {
-                if (link.value < minValue) {
-                    minValue = link.value;
-                }
-            });
+                links.forEach(function (link) {
+                    link.source = nodes[link.source] || (nodes[link.source] = {name: link.source});
+                    link.target = nodes[link.target] || (nodes[link.target] = {name: link.target});
+                });
 
-            redrawGraph();
-        }
-    );
+                links = links.filter(function (link) {
+                    return link.value > 0;
+                });
+
+                links.forEach(function (link) {
+                    if (link.value < minValue) {
+                        minValue = link.value;
+                    }
+                });
+
+                redrawGraph();
+            }
+        );
+    }
 
     function redrawGraph() {
         var width = 960,

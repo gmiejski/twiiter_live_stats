@@ -74,3 +74,7 @@ a.anchor {
     font: 14px sans-serif;
     pointer-events: none;
 }
+
+.refresh-button-container {
+    text-align: left;
+}

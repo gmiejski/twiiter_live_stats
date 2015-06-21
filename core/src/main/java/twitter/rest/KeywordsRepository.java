@@ -6,6 +6,7 @@ import com.mongodb.*;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by grzegorz.miejski on 17/05/15.
@@ -33,10 +34,11 @@ public class KeywordsRepository extends GenericRepository<Keyword> {
         return this.findByWeb("http://localhost:8080/keywords", map -> new Keyword(map.get("value")));
     }
 
-    public void addKeywordOccurrence(List<String> keywords) {
+    public void addKeywordOccurrence(List<String> keywords, Optional<String> countryCode) {
         keywords.forEach(keyword -> {
             DBObject searchQuery = new BasicDBObject("value", keyword);
             BasicDBObject updateOccurrencesQuery = new BasicDBObject("$push", new BasicDBObject("occurrences", new Date()));
+            countryCode.ifPresent(cc -> updateOccurrencesQuery.append("$inc", new BasicDBObject("occurrencesByCountry." + cc, 1)));
             keywordCollection.update(searchQuery, updateOccurrencesQuery);
         });
     }

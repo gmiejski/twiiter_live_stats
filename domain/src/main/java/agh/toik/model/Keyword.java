@@ -2,9 +2,7 @@ package agh.toik.model;
 
 import org.springframework.data.annotation.Id;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by grzegorz.miejski on 17/05/15.
@@ -16,14 +14,16 @@ public class Keyword {
     private String value;
 
     private List<Date> occurrences;
+    private Map<String, Integer> occurrencesByCountry;
 
-    public Keyword(String value, List<Date> occurrences) {
+    public Keyword(String value, List<Date> occurrences, Map<String, Integer> occurrencesByCountry) {
         this.value = value;
         this.occurrences = new ArrayList<>(occurrences);
+        this.occurrencesByCountry = new HashMap<>(occurrencesByCountry);
     }
 
     public Keyword(String value) {
-        this(value, new ArrayList<>());
+        this(value, new ArrayList<>(), new HashMap<>());
     }
 
     public Keyword() {
@@ -52,6 +52,14 @@ public class Keyword {
 
     public void setOccurrences(List<Date> occurrences) {
         this.occurrences = occurrences;
+    }
+
+    public Map<String, Integer> getOccurrencesByCountry() {
+        return occurrencesByCountry;
+    }
+
+    public void setOccurrencesByCountry(Map<String, Integer> occurrencesByCountry) {
+        this.occurrencesByCountry = occurrencesByCountry;
     }
 
     @Override

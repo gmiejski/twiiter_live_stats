@@ -40,7 +40,10 @@ public class TweetFilterBolt extends BaseRichBolt {
                 .stream()
                 .filter(statusTextLower::contains)
                 .collect(toList());
-        outputCollector.emit(new Values(status, matchingKeywords));
+
+        if (!matchingKeywords.isEmpty()) {
+            outputCollector.emit(new Values(status, matchingKeywords));
+        }
     }
 
     @Override

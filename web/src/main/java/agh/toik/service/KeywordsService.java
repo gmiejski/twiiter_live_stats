@@ -39,13 +39,7 @@ public class KeywordsService {
     private boolean removeDatesOutOfQuery(LocalDateTime startDate, LocalDateTime endDate, Keyword keyword) {
         return keyword.getOccurrences().removeIf(date -> {
             LocalDateTime ldt = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-            if (startDate != null && ldt.isBefore(startDate)) {
-                return true;
-            }
-            if (endDate != null && ldt.isAfter(endDate)) {
-                return true;
-            }
-            return false;
+            return (startDate != null && ldt.isBefore(startDate)) || (endDate != null && ldt.isAfter(endDate));
         });
     }
 }

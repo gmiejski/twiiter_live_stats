@@ -78,3 +78,13 @@ a.anchor {
 .refresh-button-container {
     text-align: left;
 }
+
+.world-map {
+    position: relative;
+    width: 960px;
+    height: 700px;
+}
+
+.screen-height {
+    height: 1100px;
+}

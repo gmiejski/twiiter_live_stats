@@ -30,6 +30,7 @@
                 <li><a href="#frequencies">Keyword frequencies</a></li>
                 <li><a href="#connections">Keyword connections</a></li>
                 <li><a href="#map">World map</a></li>
+                <li><a href="#add">Add keywords/connections</a></li>
             </ul>
         </div>
     </div>
@@ -124,6 +125,33 @@
 
             <div id="world-map"></div>
         </div>
+
+        <div class="container screen-height">
+            <a id="add" class="anchor"></a>
+
+            <h1>Add keywords/connections</h1>
+
+            <div class="container">
+                <label>
+                    Keyword:
+                    <input type="text" class="form-control" name="value" id="add-keyword-input"/>
+                    <input type="button" class="btn" value="Add" id="add-keyword-button"/>
+                </label>
+                <div id="defined-keywords">
+
+                </div>
+            </div>
+
+
+            <div class="container">
+                <label>
+                    Keyword connection:
+                    <input type="text" class="form-control" name="firstKeyword" id="add-first-keyword-input"/>
+                    <input type="text" class="form-control" name="secondKeyword" id="add-second-keyword-input"/>
+                    <input type="button" class="btn" value="Add" id="add-connection-button"/>
+                </label>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -137,6 +165,7 @@
 <script src="js/bar-chart.js"></script>
 <script src="js/graph.js"></script>
 <script src="js/world-map.js"></script>
+<script src="js/add.js"></script>
 
 </body>
 </html>

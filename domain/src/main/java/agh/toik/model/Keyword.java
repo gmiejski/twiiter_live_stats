@@ -28,6 +28,7 @@ public class Keyword {
 
     public Keyword() {
         this.occurrences = new ArrayList<>();
+        this.occurrencesByCountry = new HashMap<>();
     }
 
     public String getId() {

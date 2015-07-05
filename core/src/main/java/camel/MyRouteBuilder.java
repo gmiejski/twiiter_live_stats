@@ -10,6 +10,6 @@ public class MyRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
         from("direct:main")
 //                .process((Exchange exchange) -> exchange.getOut().setBody("Hahahaha"))
-                .to("websocket:localhost:8085/main?sendToAll=true");
+                .to("websocket:localhost:8080/topic/greetings?sendToAll=true");
     }
 }
